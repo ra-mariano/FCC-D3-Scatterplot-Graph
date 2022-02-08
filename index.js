@@ -8,8 +8,14 @@ req.onload = function(){
  // let stringed=  JSON.stringify(json.data);
   // let dataset = json.data
  
- console.log(json[0])
+ console.log(json)
 
+
+ 
+ json.forEach(function (d) {
+  var parsedTime = d.Time.split(':');
+  d.Time = new Date(2010, 8, 4, 0, parsedTime[0], parsedTime[1]);
+});
  
  const w = 900;
  const h = 500;
@@ -18,12 +24,17 @@ req.onload = function(){
 
 
  const xscale = d3.scaleLinear()
-    .domain([1994,2015])
-    .range([0, w]);
+    .domain([1992,2015])
+    .range([200, w]);
 
-const yscale = d3.scaleLinear()
-   .domain([0, 18064.7])
-   .range([h, 0])
+const yscale = d3.scaleTime()
+   .domain(
+    d3.extent(json, function (d) {
+      return d.Time;
+    })
+  )
+   .range([0, h])
+   
 
 
 
@@ -31,19 +42,19 @@ const yscale = d3.scaleLinear()
  
  const svgarea = d3.select("body")
  .append("svg")
- .attr("width", w)
+ .attr("width", w+20)
  .attr("height", h+50);
 
 svgarea.selectAll("circle")
        .data(json)
        .enter()
        .append("circle")
-       .attr("id","dot")
+       .attr("class","dot")
        .attr("data-yvalue", d => d.Time)
        .attr("data-xvalue", d => d.Year)
        .attr("r", 4)
-       .attr("cx", (d,i)=> (i*17+200))
-       .attr("cy", (d)=> h-(d.Time-400))
+       .attr('cx', (d) => xscale(d.Year))
+       .attr('cy', (d) => yscale(d.Time))
 
 
 
@@ -51,11 +62,12 @@ svgarea.selectAll("circle")
    const xAxis = d3.axisBottom(xscale);
      
         svgarea.append("g")
-           .attr("transform", "translate(200," + h + ")")
+           .attr("transform", "translate(00," + h + ")")
            .call(xAxis)
            .attr("id", "x-axis")
 
-      const yAxis = d3.axisLeft(yscale);
+           var timeFormat = d3.timeFormat('%M:%S');
+           var yAxis = d3.axisLeft(yscale).tickFormat(timeFormat);
      
         svgarea.append("g")
            .attr("transform", "translate("+200+", 0)")
