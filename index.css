@@ -1,5 +1,6 @@
 .texts {
-  font-family: sans-serif
+  font-family: sans-serif;
+  text-align: center;
 }
 
 
@@ -11,4 +12,14 @@
 
 #svgarea {
   margin-top: 20px
+}
+
+#tooltip {
+  background-color: rgb(219, 144, 248);
+  font-family: sans-serif;
+  font-size: small;
+  border-radius: 20px;
+  padding: 10px 10px 10px 10px;
+  opacity: 80%;
+  
 }

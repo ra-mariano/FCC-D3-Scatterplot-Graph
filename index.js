@@ -8,7 +8,7 @@ req.onload = function(){
  // let stringed=  JSON.stringify(json.data);
   // let dataset = json.data
  
- console.log(json)
+ 
 
 
  
@@ -62,13 +62,19 @@ svgarea.selectAll("circle")
        .attr('cy', (d) => yscale(d.Time))
        
 
-
+       svgarea
+      
+       .append("text")
+       .attr('id', 'legend')
+.text("I am legend")
+.attr("transform", "translate(750," + (h-400) + ")")
+.style("position", "absolute")
 
    
             var xAxis = d3.axisBottom(xscale).tickFormat(d3.format("d"));
      
         svgarea.append("g")
-           .attr("transform", "translate(00," + h + ")")
+           .attr("transform", "translate(0," + h + ")")
            .call(xAxis)
            .attr("id", "x-axis")
 
@@ -89,20 +95,21 @@ svgarea.selectAll("circle")
            
 
            d3.selectAll(".dot")
-           
+
            .on("mouseover", function(event, d){
            let dataxvalue =  this.getAttribute("data-xvalue")
            return tooltip
             .style("visibility", "visible")
             .attr("data-year", dataxvalue)
-            .html(d.Name + "<br/>" + d.Nationality + "<br/>" + d.Year + "<br/>" + d.Time+ "<br/>" + d.Doping)})
+            .html(d.Name + "<br/>" + "Country: "+d.Nationality + "<br/>" + d.Year + "<br/>" + "Time: "+timeFormat(d.Time)+ "<br/><br/>" + "<strong>"+d.Doping+"</strong>")})
 
             .on("mousemove", function(event, d){
               var i = this.getAttribute('index');
              
               return tooltip
-              .style('left', (i*5)  +"px")
-              .style('top', h- (d[1])+50 +"px")
+              .style('left', xscale(d.Year)+"px")
+              .style('top', yscale(d.Time)+40 +"px")
+              
             })
 
 
