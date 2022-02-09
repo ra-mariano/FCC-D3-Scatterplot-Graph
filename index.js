@@ -32,11 +32,11 @@ req.onload = function(){
  
  const yscale = d3.scaleTime()
  .domain(
- d3.extent(json, function (d) {
-   return d.Time;
- })
- )
- .range([0, h])
+  d3.extent(json, function (d) {
+    return d.Time;
+  })
+)
+ .range([10, h])
 
 
 
@@ -57,6 +57,7 @@ svgarea.selectAll("circle")
        .attr("data-yvalue", d => d.Time)
        .attr("data-xvalue", d => d.Year)
        .attr("r", 5)
+       .attr('index', (d, i) => i)
        .attr('cx', (d) => xscale(d.Year))
        .attr('cy', (d) => yscale(d.Time))
        
@@ -85,14 +86,24 @@ svgarea.selectAll("circle")
            .style("position", "absolute")
            .style("visibility", "hidden")
            .attr("id","tooltip")
+           
 
            d3.selectAll(".dot")
            
-           .on("mouseover", function(){
+           .on("mouseover", function(event, d){
            let dataxvalue =  this.getAttribute("data-xvalue")
            return tooltip
             .style("visibility", "visible")
-          .html(dataxvalue)})
+            .attr("data-year", dataxvalue)
+            .html(d.Name + "<br/>" + d.Nationality + "<br/>" + d.Year + "<br/>" + d.Time+ "<br/>" + d.Doping)})
+
+            .on("mousemove", function(event, d){
+              var i = this.getAttribute('index');
+             
+              return tooltip
+              .style('left', (i*5)  +"px")
+              .style('top', h- (d[1])+50 +"px")
+            })
 
 
            .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
