@@ -1,3 +1,14 @@
 .texts {
   font-family: sans-serif
 }
+
+
+.dot {
+  stroke: #000;
+  opacity: 0.8;
+  fill: rgb(64, 96, 240)
+}
+
+#svgarea {
+  margin-top: 20px
+}
